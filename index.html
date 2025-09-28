@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue App</title>
+    
+    <!-- Material Symbols stylesheet -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+    <!-- Style awal untuk mencegah flash -->
+    <style>
+      /* Sembunyikan konten sampai tema ditentukan */
+      body {
+        visibility: hidden;
+        opacity: 0;
+      }
+      
+      /* Terapkan tema berdasarkan localStorage atau preferensi sistem */
+      :root {
+        --bg-primary: #ffffff;
+        --text-primary: #1a202c;
+      }
+      
+      html.dark {
+        --bg-primary: #1a202c;
+        --text-primary: #f7fafc;
+      }
+      
+      body {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+      }
+    </style>
+    
+    <!-- Script untuk mencegah flash tema -->
+    <script>
+      (function() {
+        // Cek localStorage atau preferensi sistem
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = savedTheme 
+          ? savedTheme === 'dark' 
+          : systemPrefersDark;
+        
+        // Terapkan kelas dark jika diperlukan
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        }
+        
+        // Tunggu hingga DOM siap untuk menampilkan konten
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(function() {
+            document.body.style.visibility = 'visible';
+            document.body.style.opacity = '1';
+            document.body.style.transition = 'opacity 0.3s ease';
+          }, 100);
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
