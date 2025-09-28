@@ -1,20 +1,26 @@
 <template>
   <div class="dashboard">
-    <h1>Dashboard</h1>
+    <h1>{{ t('page.dashboard.title') }}</h1>
     
     <div class="dashboard-grid">
       <div class="dashboard-card">
-        <h2>Statistik</h2>
-        <p>Konten dashboard Anda</p>
+        <h2>{{ t('page.dashboard.statistics') }}</h2>
+        <p>{{ t('page.dashboard.content') }}</p>
       </div>
       
       <div class="dashboard-card">
-        <h2>Grafik</h2>
-        <p>Konten dashboard Anda</p>
+        <h2>{{ t('page.dashboard.chart') }}</h2>
+        <p>{{ t('page.dashboard.content') }}</p>
       </div>
     </div>
   </div>
 </template>
+
+<script setup>
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+</script>
 
 <style scoped>
 .dashboard {

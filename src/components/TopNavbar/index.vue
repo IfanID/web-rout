@@ -2,7 +2,7 @@
   <nav class="top-navbar">
     <div class="navbar-left">
       <img src="@/icons/logo/logo.png" alt="Logo" class="navbar-logo">
-      <span class="website-name">ROut</span>
+      <span class="website-name">{{ appName }}</span>
     </div>
 
     <!-- navbar-center dihapus -->
@@ -13,34 +13,33 @@
       <div class="profile-dropdown-container" ref="dropdownContainer">
         <img 
           src="@/icons/profile.jpg" 
-          alt="Profile" 
+          :alt="t('top_navbar.profile_menu.profile')" 
           class="profile-photo"
           @click="toggleDropdown"
         >
 
         <transition name="balloon">
-          <div v-if="isOpen" class="dropdown-menu" @click.stop>
+          <div v-if="isOpen" class="dropdown-menu" @click="isOpen = false">
             <div class="dropdown-header">
-              <img src="@/icons/profile.jpg" alt="User Profile" class="header-profile-photo">
+              <img src="@/icons/profile.jpg" :alt="t('top_navbar.profile_menu.profile')" class="header-profile-photo">
               <div class="user-info">
-                <span class="user-name">Nama Pengguna</span>
-                <span class="user-email">email@example.com</span>
+                <span class="user-name">{{ t('top_navbar.profile_menu.user_name') }}</span>
+                <span class="user-email">{{ t('top_navbar.profile_menu.user_email') }}</span>
               </div>
             </div>
-            <div class="menu-item-group">
-              <div class="menu-item">
-                <span class="material-symbols-outlined menu-icon">person</span> <!-- Material Symbol for Profile -->
-                Profile
-              </div>
-              <div class="menu-item">
-                <span class="material-symbols-outlined menu-icon">settings</span> <!-- Material Symbol for Settings -->
-                Pengaturan
-              </div>
-            </div>
+                          <div class="menu-item-group">
+                          <router-link to="/profile" class="menu-item">
+                            <span class="material-symbols-outlined menu-icon">person</span> <!-- Material Symbol for Profile -->
+                            {{ t('top_navbar.profile_menu.profile') }}
+                          </router-link>
+                          <router-link to="/settings" class="menu-item">
+                            <span class="material-symbols-outlined menu-icon">settings</span> <!-- Material Symbol for Settings -->
+                            {{ t('top_navbar.profile_menu.settings') }}
+                          </router-link>            </div>
             <div class="menu-item-group border-top">
-              <div class="menu-item">
+              <div class="menu-item" @click="openAuthScreen">
                 <span class="material-symbols-outlined menu-icon">login</span> <!-- Material Symbol for Sign In -->
-                Sign In
+                {{ t('top_navbar.profile_menu.sign_in') }}
               </div>
             </div>
           </div>
@@ -52,7 +51,14 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ThemeToggle from '@/components/ThemeToggle/index.vue';
+import pkg from '../../../package.json';
+import { useAuthStore } from '@/stores/auth';
+
+const { t } = useI18n();
+const appName = pkg.name;
+const authStore = useAuthStore();
 
 const isOpen = ref(false);
 const dropdownContainer = ref(null);
@@ -65,6 +71,10 @@ const closeDropdown = (event) => {
   if (dropdownContainer.value && !dropdownContainer.value.contains(event.target)) {
     isOpen.value = false;
   }
+};
+
+const openAuthScreen = () => {
+  authStore.showAuthScreen();
 };
 
 onMounted(() => {
@@ -81,7 +91,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 0.5rem;
+  padding: 0.5rem; /* Diubah agar rata di semua sisi */
   height: 60px;
   background-color: var(--bg-primary);
   border-bottom: 1px solid var(--border-color);
@@ -228,5 +238,12 @@ onUnmounted(() => {
 .balloon-enter-to, .balloon-leave-from {
   opacity: 1;
   transform: scale(1) translateY(0);
+}
+
+@media (max-width: 768px) {
+  .top-navbar {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
 }
 </style>

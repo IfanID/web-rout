@@ -2,21 +2,23 @@
   <nav class="bottom-navbar">
     <router-link to="/" class="nav-item">
       <span class="material-symbols-outlined nav-icon">home</span>
-      <span class="nav-text">Home</span>
+      <span class="nav-text">{{ t('navigation.home') }}</span>
     </router-link>
     <router-link to="/all" class="nav-item"> <!-- Rute diubah ke /all -->
       <span class="material-symbols-outlined nav-icon">apps</span> <!-- Icon diubah ke 'apps' -->
-      <span class="nav-text">All</span>
+      <span class="nav-text">{{ t('navigation.all') }}</span>
     </router-link>
     <router-link to="/history" class="nav-item"> <!-- Rute diubah ke /history -->
       <span class="material-symbols-outlined nav-icon">history</span> <!-- Icon diubah ke 'history' -->
-      <span class="nav-text">Riwayat</span>
+      <span class="nav-text">{{ t('navigation.history') }}</span>
     </router-link>
   </nav>
 </template>
 
 <script setup>
-// Tidak ada logika khusus di sini untuk saat ini
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 </script>
 
 <style scoped>

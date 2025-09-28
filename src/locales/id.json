@@ -1,0 +1,32 @@
+{
+  "navigation": {
+    "home": "Beranda",
+    "all": "Semua",
+    "history": "Riwayat"
+  },
+  "page": {
+    "dashboard": {
+      "title": "Dasbor",
+      "statistics": "Statistik",
+      "chart": "Grafik",
+      "content": "Konten dasbor Anda"
+    },
+    "settings": {
+      "title": "Pengaturan",
+      "description": "Konfigurasi dan preferensi Anda akan ditampilkan di sini.",
+      "language_section": {
+        "title": "Bahasa",
+        "select": "Pilih Bahasa"
+      }
+    }
+  },
+  "top_navbar": {
+    "profile_menu": {
+      "user_name": "Nama Pengguna",
+      "user_email": "email@contoh.com",
+      "profile": "Profil",
+      "settings": "Pengaturan",
+      "sign_in": "Masuk"
+    }
+  }
+}

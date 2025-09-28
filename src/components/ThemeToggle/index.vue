@@ -1,50 +1,47 @@
 <template>
-  <button @click="toggleTheme" class="theme-toggle" :disabled="isTransitioning">
-    {{ isDark ? '🌙 Dark Mode' : '☀️ Light Mode' }}
+  <button 
+    @click="toggleTheme" 
+    class="theme-toggle-icon" 
+    :aria-label="isDark ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'"
+  >
+    <span class="material-symbols-outlined">
+      {{ isDark ? 'dark_mode' : 'light_mode' }}
+    </span>
   </button>
 </template>
 
 <script setup>
 import { useThemeStore } from '@/stores/theme';
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
 
 const themeStore = useThemeStore();
 const { isDark } = storeToRefs(themeStore);
-const isTransitioning = ref(false);
 
 const toggleTheme = () => {
-  // Mencegah klik berulang selama transisi
-  if (isTransitioning.value) return;
-  
-  isTransitioning.value = true;
   themeStore.toggleTheme();
-  
-  // Reset flag setelah transisi selesai
-  setTimeout(() => {
-    isTransitioning.value = false;
-  }, 300);
 };
 </script>
 
 <style scoped>
-.theme-toggle {
-  padding: 8px 16px;
-  border-radius: 6px;
+.theme-toggle-icon {
+  background-color: transparent;
   border: none;
-  cursor: pointer;
-  background: var(--bg-secondary);
   color: var(--text-primary);
-  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Membuat tombol menjadi lingkaran */
+  transition: background-color 0.2s ease;
 }
 
-.theme-toggle:hover {
-  background: var(--accent-color);
-  color: white;
+.theme-toggle-icon:hover {
+  background-color: var(--bg-secondary);
 }
 
-.theme-toggle:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.material-symbols-outlined {
+  font-size: 24px; /* Ukuran ikon standar */
 }
 </style>

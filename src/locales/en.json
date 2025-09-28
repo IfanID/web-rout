@@ -1,0 +1,32 @@
+{
+  "navigation": {
+    "home": "Home",
+    "all": "All",
+    "history": "History"
+  },
+  "page": {
+    "dashboard": {
+      "title": "Dashboard",
+      "statistics": "Statistics",
+      "chart": "Chart",
+      "content": "Your dashboard content"
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Your configurations and preferences will be displayed here.",
+      "language_section": {
+        "title": "Language",
+        "select": "Select Language"
+      }
+    }
+  },
+  "top_navbar": {
+    "profile_menu": {
+      "user_name": "User Name",
+      "user_email": "email@example.com",
+      "profile": "Profile",
+      "settings": "Settings",
+      "sign_in": "Sign In"
+    }
+  }
+}
