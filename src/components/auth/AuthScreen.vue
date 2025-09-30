@@ -6,30 +6,11 @@
       <div class="form-container">
         <div class="auth-header">
           <img src="@/icons/logo/logo.png" alt="Logo" class="logo">
-          <h2>{{ activeTab === 'login' ? 'Selamat Datang' : 'Buat Akun' }}</h2>
-          <p>{{ activeTab === 'login' ? 'Masuk untuk melanjutkan ke proyek Anda.' : 'Satu langkah lagi untuk memulai.' }}</p>
+          <h2 class="title">Selamat Datang</h2>
+          <p class="subtitle">Pilih metode masuk favorit Anda untuk melanjutkan.</p>
         </div>
-
-        <form @submit.prevent="activeTab === 'login' ? login() : register()">
-          <div v-if="activeTab === 'register'" class="form-group">
-            <label for="username">Nama Pengguna</label>
-            <input id="username" type="text" required>
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input id="email" type="email" required>
-          </div>
-          <div class="form-group">
-            <label for="password">Kata Sandi</label>
-            <input id="password" type="password" required>
-          </div>
-          
-          <a href="#" class="forgot-password" v-if="activeTab === 'login'">Lupa Kata Sandi?</a>
-
-          <button type="submit" class="submit-button">{{ activeTab === 'login' ? 'Masuk' : 'Daftar' }}</button>
-        </form>
-
-        <div class="social-divider"><span>Atau</span></div>
+  
+        <div class="social-divider"><span>ATAU</span></div>
 
         <div class="social-buttons">
           <button class="social-button google" @click="socialLogin('google')">
@@ -41,48 +22,54 @@
             <span>GitHub</span>
           </button>
         </div>
-
-        <div class="toggle-auth">
-          <p>
-            {{ activeTab === 'login' ? 'Belum punya akun?' : 'Sudah punya akun?' }}
-            <a href="#" @click.prevent="toggleTab">{{ activeTab === 'login' ? 'Daftar' : 'Masuk' }}</a>
-          </p>
-        </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
+import { signInWithGoogle, signInWithGitHub } from '@/firebase';
 
 const authStore = useAuthStore();
-const activeTab = ref('login'); // 'login' or 'register'
 
 const close = () => {
   authStore.hideAuthScreen();
 };
 
-const toggleTab = () => {
-  activeTab.value = activeTab.value === 'login' ? 'register' : 'login';
-};
+const socialLogin = async (provider) => {
+  authStore.clearNotification(); // Hapus notifikasi lama
+  try {
+    let userCredential;
+    if (provider === 'google') {
+      userCredential = await signInWithGoogle();
+    } else if (provider === 'github') {
+      userCredential = await signInWithGitHub(); 
+    }
 
-const login = () => {
-  console.log('Melakukan login...');
-};
-
-const register = () => {
-  console.log('Melakukan registrasi...');
-};
-
-const socialLogin = (provider) => {
-  console.log(`Melakukan login dengan ${provider}...`);
+    if (userCredential && userCredential.user) {
+      authStore.setUser(userCredential.user);
+      authStore.hideAuthScreen();
+      authStore.setNotification(`Login ${provider} berhasil!`, 'success');
+    }
+  } catch (error) {
+    authStore.setNotification(`Login ${provider} gagal: ${error.message}`, 'error');
+  }
 };
 </script>
 
 <style scoped>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .auth-overlay {
   position: fixed;
   top: 0;
@@ -96,134 +83,87 @@ const socialLogin = (provider) => {
   z-index: 1000;
   padding: 1rem;
   box-sizing: border-box;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .auth-card {
   width: 100%;
   max-width: 400px;
   background-color: var(--bg-primary);
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.1);
   position: relative;
-  padding: 3rem 2.5rem;
+  padding: 2.5rem;
   box-sizing: border-box;
-}
-
-.form-container {
-  display: flex;
-  flex-direction: column;
+  border: 1px solid var(--border-color);
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 
 .close-button {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: none;
-  border: none;
-  font-size: 2rem;
+  width: 36px;
+  height: 36px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
   cursor: pointer;
   color: var(--text-secondary);
-  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: var(--accent-color-translucent);
+  color: var(--accent-color);
+  transform: rotate(90deg) scale(1.1);
+  border-color: var(--accent-color);
 }
 
 .auth-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .logo {
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   margin: 0 auto 1rem auto;
   border-radius: 50%;
 }
 
-.auth-header h2 {
-  font-size: 1.75rem;
-  font-weight: 600;
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
   margin: 0 0 0.5rem 0;
   color: var(--text-primary);
 }
 
-.auth-header p {
+.subtitle {
   margin: 0;
   color: var(--text-secondary);
   font-size: 0.95rem;
-}
-
-.form-group {
-  margin-bottom: 1.25rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: var(--text-primary);
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  font-size: 1rem;
-  box-sizing: border-box;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
-  outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px var(--accent-color-translucent);
-}
-
-.forgot-password {
-  display: block;
-  text-align: right;
-  margin-top: -0.75rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.85rem;
-  color: var(--accent-color);
-  text-decoration: none;
-}
-
-.submit-button {
-  width: 100%;
-  padding: 0.9rem;
-  border: none;
-  border-radius: 8px;
-  background-color: var(--accent-color);
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 0.5rem;
-}
-
-.submit-button:hover {
-  background-color: var(--accent-color-dark);
+  line-height: 1.5;
 }
 
 .social-divider {
   text-align: center;
-  margin: 1.5rem 0;
+  margin: 2rem 0;
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
   position: relative;
 }
 
 .social-divider span {
   background-color: var(--bg-primary);
-  padding: 0 0.5rem;
+  padding: 0 1rem;
   position: relative;
   z-index: 1;
 }
@@ -241,9 +181,8 @@ input[type="password"]:focus {
 
 .social-buttons {
   display: flex;
-  flex-direction: row;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  flex-direction: column;
+  gap: 1.25rem; /* Increased gap for better spacing */
 }
 
 .social-button {
@@ -251,42 +190,46 @@ input[type="password"]:focus {
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  padding: 0.75rem;
+  padding: 0.8rem;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: var(--bg-secondary);
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
-  flex: 1;
-}
-
-.social-button:hover {
-  background-color: var(--border-color);
+  transition: all 0.25s ease-out;
 }
 
 .social-button svg {
-  width: 20px;
-  height: 20px;
+    transition: transform 0.25s ease-out;
 }
 
-.toggle-auth {
-  text-align: center;
-  margin-top: 2rem;
-  font-size: 0.95rem;
-  color: var(--text-secondary);
+.social-button:hover {
+  border-color: transparent;
 }
 
-.toggle-auth a {
-  color: var(--accent-color);
-  text-decoration: none;
-  font-weight: 600;
+.social-button:hover svg {
+  transform: scale(1.2) rotate(-5deg);
+}
+
+.social-button.google:hover {
+  background-color: #4285F4;
+  box-shadow: 0 8px 20px -6px #4285f4a0;
+  color: #fff;
+}
+
+.social-button.github:hover {
+  background-color: #4285F4; /* Changed to Google's blue */
+  box-shadow: 0 8px 20px -6px #4285f4a0; /* Changed to Google's shadow */
+  color: #fff;
 }
 
 @media (max-width: 480px) {
   .auth-card {
-    padding: 2.5rem 1.5rem;
+    padding: 2rem 1.5rem;
+  }
+  .title {
+    font-size: 1.6rem;
   }
 }
 </style>

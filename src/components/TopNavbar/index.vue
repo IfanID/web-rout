@@ -12,7 +12,7 @@
       
       <div class="profile-dropdown-container" ref="dropdownContainer">
         <img 
-          src="@/icons/profile.jpg" 
+          :src="authStore.user?.photoURL || '@/icons/profile.jpg'" 
           :alt="t('top_navbar.profile_menu.profile')" 
           class="profile-photo"
           @click="toggleDropdown"
@@ -21,10 +21,10 @@
         <transition name="balloon">
           <div v-if="isOpen" class="dropdown-menu" @click="isOpen = false">
             <div class="dropdown-header">
-              <img src="@/icons/profile.jpg" :alt="t('top_navbar.profile_menu.profile')" class="header-profile-photo">
+              <img :src="authStore.user?.photoURL || '@/icons/profile.jpg'" :alt="t('top_navbar.profile_menu.profile')" class="header-profile-photo">
               <div class="user-info">
-                <span class="user-name">{{ t('top_navbar.profile_menu.user_name') }}</span>
-                <span class="user-email">{{ t('top_navbar.profile_menu.user_email') }}</span>
+                <span class="user-name">{{ authStore.user?.displayName || t('top_navbar.profile_menu.user_name') }}</span>
+                <span class="user-email">{{ authStore.user?.email || t('top_navbar.profile_menu.user_email') }}</span>
               </div>
             </div>
                           <div class="menu-item-group">
@@ -37,9 +37,13 @@
                             {{ t('top_navbar.profile_menu.settings') }}
                           </router-link>            </div>
             <div class="menu-item-group border-top">
-              <div class="menu-item" @click="openAuthScreen">
+              <div class="menu-item" @click="openAuthScreen" v-if="!authStore.user">
                 <span class="material-symbols-outlined menu-icon">login</span> <!-- Material Symbol for Sign In -->
                 {{ t('top_navbar.profile_menu.sign_in') }}
+              </div>
+              <div class="menu-item" @click="authStore.logout" v-else>
+                <span class="material-symbols-outlined menu-icon">logout</span> <!-- Material Symbol for Sign Out -->
+                {{ t('top_navbar.profile_menu.sign_out') }}
               </div>
             </div>
           </div>
