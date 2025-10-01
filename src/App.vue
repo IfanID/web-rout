@@ -12,6 +12,7 @@
     <BottomNavbar /> <!-- Menggunakan komponen BottomNavbar -->
 
     <AuthScreen />
+    <Notification /> <!-- Tambahkan komponen Notifikasi di sini -->
   </div>
 </template>
 
@@ -20,12 +21,28 @@ import { onMounted } from 'vue';
 import BottomNavbar from '@/components/BottomNavbar/index.vue'; // Import komponen BottomNavbar
 import TopNavbar from '@/components/TopNavbar/index.vue'; // Import komponen TopNavbar
 import AuthScreen from '@/components/auth/AuthScreen.vue';
+import Notification from '@/components/Notification/index.vue'; // Import komponen Notifikasi
 import { useLanguageStore } from '@/stores/language';
+import { useAuthStore } from '@/stores/auth'; // Import authStore
+import { auth, onAuthStateChanged } from '@/firebase'; // Import auth dan onAuthStateChanged
 
 const languageStore = useLanguageStore();
+const authStore = useAuthStore(); // Inisialisasi authStore
 
 onMounted(() => {
   languageStore.initializeLocale();
+
+  // Listener untuk perubahan status autentikasi Firebase
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Pengguna login
+      authStore.setUser(user);
+      authStore.hideAuthScreen(); // Sembunyikan layar auth jika sudah login
+    } else {
+      // Pengguna logout
+      authStore.setUser(null);
+    }
+  });
 });
 </script>
 

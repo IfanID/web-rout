@@ -15,7 +15,22 @@ app.use(pinia);
 app.use(router);
 app.use(i18n);
 
+import { useLogStore } from './stores/log';
+
 const authStore = useAuthStore(pinia);
+
+// ===== Intersepsi Console Log =====
+const logStore = useLogStore(pinia);
+const originalConsoleLog = console.log;
+console.log = function(message, ...args) {
+  // Panggil console.log asli agar tetap muncul di konsol browser
+  originalConsoleLog.apply(console, [message, ...args]);
+  
+  // Kirim log ke Pinia store
+  logStore.addLog(message, ...args);
+};
+// ==================================
+
 
 // Listener untuk memantau perubahan status otentikasi
 onAuthStateChanged(auth, (user) => {

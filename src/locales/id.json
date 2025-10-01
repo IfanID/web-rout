@@ -1,7 +1,7 @@
 {
   "navigation": {
     "home": "Beranda",
-    "all": "Semua",
+    "library": "Perpustakaan",
     "history": "Riwayat"
   },
   "page": {
@@ -11,12 +11,20 @@
       "chart": "Grafik",
       "content": "Konten dasbor Anda"
     },
+    "library": {
+      "title": "Perpustakaan",
+      "description": "Ini adalah halaman perpustakaan."
+    },
     "settings": {
       "title": "Pengaturan",
       "description": "Konfigurasi dan preferensi Anda akan ditampilkan di sini.",
       "language_section": {
         "title": "Bahasa",
         "select": "Pilih Bahasa"
+      },
+      "notification_section": {
+        "title": "Notifikasi",
+        "button": "Kelola Notifikasi"
       }
     }
   },
@@ -26,7 +34,8 @@
       "user_email": "email@contoh.com",
       "profile": "Profil",
       "settings": "Pengaturan",
-      "sign_in": "Masuk"
+      "sign_in": "Masuk",
+      "sign_out": "Keluar"
     }
   }
 }

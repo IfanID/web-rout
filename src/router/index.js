@@ -21,6 +21,21 @@ const router = createRouter({
       path: '/profile',
       name: 'Profile',
       component: () => import('../views/profile/index.vue')
+    },
+    {
+      path: '/library',
+      name: 'Library',
+      component: () => import('../views/library/index.vue')
+    },
+    {
+      path: '/log',
+      name: 'Log',
+      component: () => import('../views/log/index.vue')
+    },
+    {
+      path: '/settings/notifikasi',
+      name: 'NotificationSettings',
+      component: () => import('../views/settings/notifikasi/index.vue')
     }
   ],
 })

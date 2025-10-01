@@ -4,9 +4,9 @@
       <span class="material-symbols-outlined nav-icon">home</span>
       <span class="nav-text">{{ t('navigation.home') }}</span>
     </router-link>
-    <router-link to="/all" class="nav-item"> <!-- Rute diubah ke /all -->
-      <span class="material-symbols-outlined nav-icon">apps</span> <!-- Icon diubah ke 'apps' -->
-      <span class="nav-text">{{ t('navigation.all') }}</span>
+    <router-link to="/library" class="nav-item">
+      <span class="material-symbols-outlined nav-icon">apps</span>
+      <span class="nav-text">{{ t('navigation.library') }}</span>
     </router-link>
     <router-link to="/history" class="nav-item"> <!-- Rute diubah ke /history -->
       <span class="material-symbols-outlined nav-icon">history</span> <!-- Icon diubah ke 'history' -->

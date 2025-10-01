@@ -5,6 +5,12 @@ export const useThemeStore = defineStore('theme', {
     isDark: false,
     isInitialized: false, // Tambahkan flag untuk mencegah inisialisasi ganda
     systemMediaQuery: null, // Simpan referensi ke media query
+    notificationColors: {
+      info: { background: '#2196F3', text: '#FFFFFF' },
+      success: { background: '#4CAF50', text: '#FFFFFF' },
+      warning: { background: '#FFC107', text: '#333333' },
+      error: { background: '#F44336', text: '#FFFFFF' },
+    },
   }),
   actions: {
     initTheme() {

@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { signOutUser } from '@/firebase'; // Impor fungsi signOutUser
+import { useNotificationStore } from './notification';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     isAuthScreenVisible: false,
     user: null,
-    notification: null, // { message: String, type: String (e.g., 'error', 'success') }
   }),
   actions: {
     showAuthScreen() {
@@ -18,23 +18,14 @@ export const useAuthStore = defineStore('auth', {
       this.user = userData;
     },
     async logout() {
+      const notificationStore = useNotificationStore();
       try {
         await signOutUser();
         this.setUser(null);
-        this.setNotification('Anda berhasil logout.', 'success');
+        notificationStore.setNotification({ message: 'Anda berhasil logout.', type: 'success' });
       } catch (error) {
-        this.setNotification(`Gagal logout: ${error.message}`, 'error');
+        notificationStore.setNotification({ message: `Gagal logout: ${error.message}`, type: 'error' });
       }
-    },
-    setNotification(message, type = 'info') {
-      this.notification = { message, type };
-      // Hapus notifikasi setelah beberapa detik
-      setTimeout(() => {
-        this.clearNotification();
-      }, 5000); // Notifikasi akan hilang setelah 5 detik
-    },
-    clearNotification() {
-      this.notification = null;
     },
   },
 });

@@ -14,6 +14,13 @@
         </select>
       </div>
     </div>
+
+    <div class="settings-section">
+      <h2>{{ t('page.settings.notification_section.title') }}</h2>
+      <router-link to="/settings/notifikasi" class="btn-link">
+        {{ t('page.settings.notification_section.button') }}
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -82,5 +89,20 @@ select {
 select:focus {
   outline: none;
   border-color: var(--accent-color);
+}
+
+.btn-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--accent-color);
+  color: var(--accent-text);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btn-link:hover {
+  background-color: var(--accent-color-hover);
 }
 </style>

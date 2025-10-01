@@ -1,7 +1,7 @@
 {
   "navigation": {
     "home": "Home",
-    "all": "All",
+    "library": "Library",
     "history": "History"
   },
   "page": {
@@ -11,12 +11,20 @@
       "chart": "Chart",
       "content": "Your dashboard content"
     },
+    "library": {
+      "title": "Library",
+      "description": "This is the library page."
+    },
     "settings": {
       "title": "Settings",
       "description": "Your configurations and preferences will be displayed here.",
       "language_section": {
         "title": "Language",
         "select": "Select Language"
+      },
+      "notification_section": {
+        "title": "Notifications",
+        "button": "Manage Notifications"
       }
     }
   },
@@ -26,7 +34,8 @@
       "user_email": "email@example.com",
       "profile": "Profile",
       "settings": "Settings",
-      "sign_in": "Sign In"
+      "sign_in": "Sign In",
+      "sign_out": "Sign Out"
     }
   }
 }
